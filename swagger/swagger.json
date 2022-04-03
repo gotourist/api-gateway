@@ -1,0 +1,363 @@
+{
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "swagger": "2.0",
+  "info": {
+    "title": "Documentation of Posts CRUD API Gateway."
+  },
+  "paths": {
+    "/v1/posts/delete/{id}/": {
+      "delete": {
+        "description": "Delete post",
+        "tags": [
+          "post"
+        ],
+        "summary": "Delete post",
+        "operationId": "deletePostRequest",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "description": "post id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": ""
+          },
+          "400": {
+            "$ref": "#/responses/badRequest"
+          },
+          "500": {
+            "$ref": "#/responses/internalService"
+          }
+        }
+      }
+    },
+    "/v1/posts/detail/{id}/": {
+      "get": {
+        "description": "Get post detail",
+        "tags": [
+          "post"
+        ],
+        "summary": "Get post detail",
+        "operationId": "postDetailRequest",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "description": "post id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/postDetailResponse"
+          },
+          "400": {
+            "$ref": "#/responses/badRequest"
+          },
+          "500": {
+            "$ref": "#/responses/internalService"
+          }
+        }
+      }
+    },
+    "/v1/posts/list/": {
+      "get": {
+        "description": "Get posts list",
+        "tags": [
+          "post"
+        ],
+        "summary": "Get posts list",
+        "operationId": "postsList",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "Limit",
+            "description": "limit",
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "Page",
+            "description": "page number",
+            "name": "page",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "x-go-name": "Search",
+            "description": "search text",
+            "name": "search",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/postsListResponse"
+          },
+          "400": {
+            "$ref": "#/responses/badRequest"
+          },
+          "500": {
+            "$ref": "#/responses/internalService"
+          }
+        }
+      }
+    },
+    "/v1/posts/update/{id}/": {
+      "put": {
+        "description": "Update post",
+        "tags": [
+          "post"
+        ],
+        "summary": "Update post",
+        "operationId": "updatePostRequest",
+        "parameters": [
+          {
+            "type": "integer",
+            "format": "int64",
+            "x-go-name": "ID",
+            "description": "post id",
+            "name": "id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "schema": {
+              "$ref": "#/definitions/UpdatePostRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/responses/updatePostResponse"
+          },
+          "400": {
+            "$ref": "#/responses/badRequest"
+          },
+          "500": {
+            "$ref": "#/responses/internalService"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "DetailPostResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          },
+          "x-go-name": "Errors"
+        },
+        "result": {
+          "$ref": "#/definitions/Post"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/genproto/post"
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          },
+          "x-go-name": "Errors"
+        },
+        "field": {
+          "type": "string",
+          "x-go-name": "Field"
+        },
+        "messages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "Messages"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/genproto/post"
+    },
+    "InternalServerError": {
+      "type": "object",
+      "title": "InternalServerError ...",
+      "properties": {
+        "non_field_errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "NonFieldErrors"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/api/models"
+    },
+    "ListPostsResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "count": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Count"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          },
+          "x-go-name": "Errors"
+        },
+        "results": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Post"
+          },
+          "x-go-name": "Results"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/genproto/post"
+    },
+    "Post": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "string",
+          "x-go-name": "Body"
+        },
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Id"
+        },
+        "title": {
+          "type": "string",
+          "x-go-name": "Title"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/genproto/post"
+    },
+    "UpdatePostRequest": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "type": "string",
+          "x-go-name": "Body"
+        },
+        "title": {
+          "type": "string",
+          "x-go-name": "Title"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/api/models"
+    },
+    "UpdatePostResponse": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int64",
+          "x-go-name": "Code"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Error"
+          },
+          "x-go-name": "Errors"
+        },
+        "result": {
+          "$ref": "#/definitions/Post"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/genproto/post"
+    },
+    "ValidationError": {
+      "type": "object",
+      "title": "ValidationError ...",
+      "properties": {
+        "non_field_errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "x-go-name": "NonFieldErrors"
+        }
+      },
+      "x-go-package": "github.com/iman_task/api-gateway/api/models"
+    }
+  },
+  "responses": {
+    "badRequest": {
+      "description": "Error BadRequest",
+      "schema": {
+        "$ref": "#/definitions/ValidationError"
+      }
+    },
+    "emptyResponse": {
+      "description": "Empty Response"
+    },
+    "internalService": {
+      "description": "Error Interval Server",
+      "schema": {
+        "$ref": "#/definitions/InternalServerError"
+      }
+    },
+    "notFoundResponse": {
+      "description": "Error Not Found",
+      "schema": {
+        "$ref": "#/definitions/ValidationError"
+      }
+    },
+    "postDetailResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/DetailPostResponse"
+      }
+    },
+    "postsListResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/ListPostsResponse"
+      }
+    },
+    "updatePostResponse": {
+      "description": "",
+      "schema": {
+        "$ref": "#/definitions/UpdatePostResponse"
+      }
+    }
+  }
+}
