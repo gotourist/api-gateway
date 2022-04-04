@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/iman_task/api-gateway/api/models"
+	collectpb "github.com/iman_task/api-gateway/genproto/collect"
 	postpb "github.com/iman_task/api-gateway/genproto/post"
 	"github.com/iman_task/api-gateway/pkg/logger"
 	"github.com/iman_task/api-gateway/pkg/utils"
@@ -41,7 +42,7 @@ func (p *PostHandler) ListPosts(c *gin.Context) {
 	}
 
 	if response != nil && response.Code == 3 {
-		c.JSON(http.StatusBadRequest, convertErrorMessages(response.Errors))
+		c.JSON(http.StatusBadRequest, convertPostErrorMessages(response.Errors))
 		return
 	}
 
@@ -74,7 +75,7 @@ func (p *PostHandler) DetailPost(c *gin.Context) {
 	}
 
 	if response != nil && response.Code == 3 {
-		c.JSON(http.StatusBadRequest, convertErrorMessages(response.Errors))
+		c.JSON(http.StatusBadRequest, convertPostErrorMessages(response.Errors))
 		return
 	}
 
@@ -122,7 +123,7 @@ func (p *PostHandler) UpdatePost(c *gin.Context) {
 	}
 
 	if response != nil && response.Code == 3 {
-		c.JSON(http.StatusBadRequest, convertErrorMessages(response.Errors))
+		c.JSON(http.StatusBadRequest, convertPostErrorMessages(response.Errors))
 		return
 	}
 
@@ -155,7 +156,49 @@ func (p *PostHandler) DeletePost(c *gin.Context) {
 	}
 
 	if response != nil && response.Code == 3 {
-		c.JSON(http.StatusBadRequest, convertErrorMessages(response.Errors))
+		c.JSON(http.StatusBadRequest, convertPostErrorMessages(response.Errors))
+		return
+	}
+
+	utils.ResponseError(p.log, err, c)
+}
+
+func (p *PostHandler) CollectPosts(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(p.config.CtxTimeout))
+	defer cancel()
+
+	response, err := p.serviceManager.CollectService().CollectPosts(
+		ctx, &collectpb.CollectPostsRequest{},
+	)
+
+	if err == nil && response != nil && response.Code == 0 {
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	if response != nil && response.Code == 3 {
+		c.JSON(http.StatusBadRequest, convertCollectErrorMessages(response.Errors))
+		return
+	}
+
+	utils.ResponseError(p.log, err, c)
+}
+
+func (p *PostHandler) CheckCollectStatus(c *gin.Context) {
+	ctx, cancel := context.WithTimeout(context.Background(), time.Second*time.Duration(p.config.CtxTimeout))
+	defer cancel()
+
+	response, err := p.serviceManager.CollectService().CheckStatus(
+		ctx, &collectpb.CheckStatusRequest{},
+	)
+
+	if err == nil && response != nil && response.Code == 0 {
+		c.JSON(http.StatusOK, response)
+		return
+	}
+
+	if response != nil && response.Code == 3 {
+		c.JSON(http.StatusBadRequest, convertCollectErrorMessages(response.Errors))
 		return
 	}
 

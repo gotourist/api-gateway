@@ -15,6 +15,9 @@ type Config struct {
 
 	PostServiceHost string
 	PostServicePort int
+
+	CollectServiceHost string
+	CollectServicePort int
 }
 
 // Load ...
@@ -28,7 +31,10 @@ func Load() Config {
 	config.CtxTimeout = cast.ToInt(getOrReturnDefault("CTX_TIMEOUT", 7))
 
 	config.PostServiceHost = cast.ToString(getOrReturnDefault("POST_SERVICE_HOST", "0.0.0.0"))
-	config.PostServicePort = cast.ToInt(getOrReturnDefault("POST_SERVICE_PORT", 50051))
+	config.PostServicePort = cast.ToInt(getOrReturnDefault("POST_SERVICE_PORT", 9090))
+
+	config.CollectServiceHost = cast.ToString(getOrReturnDefault("COLLECT_SERVICE_HOST", "0.0.0.0"))
+	config.CollectServicePort = cast.ToInt(getOrReturnDefault("COLLECT_SERVICE_PORT", 9090))
 
 	return config
 }

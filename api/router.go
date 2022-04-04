@@ -49,6 +49,8 @@ func New(option Option) *gin.Engine {
 		api.GET("/posts/detail/:id/", handlerV1.PostHandler.DetailPost)
 		api.PUT("/posts/update/:id/", handlerV1.PostHandler.UpdatePost)
 		api.DELETE("/posts/delete/:id/", handlerV1.PostHandler.DeletePost)
+		api.POST("/posts/collect/", handlerV1.PostHandler.CollectPosts)
+		api.GET("/posts/collect/check/", handlerV1.PostHandler.CheckCollectStatus)
 	}
 
 	return router
