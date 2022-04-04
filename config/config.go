@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/joho/godotenv"
 	"os"
 
 	"github.com/spf13/cast"
@@ -18,6 +19,8 @@ type Config struct {
 
 // Load ...
 func Load() Config {
+	_ = godotenv.Load()
+
 	config := Config{}
 
 	config.HttpPort = cast.ToString(getOrReturnDefault("HTTP_PORT", ":8050"))
